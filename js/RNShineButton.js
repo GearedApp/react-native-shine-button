@@ -1,16 +1,15 @@
+import React, { PureComponent } from 'react';
+import { StyleSheet, ViewPropTypes, Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
-import React, { PureComponent } from 'react'
-import { StyleSheet, ViewPropTypes, Platform } from "react-native"
-import PropTypes from 'prop-types'
+import { requireNativeComponent } from 'react-native';
 
-import { requireNativeComponent } from "react-native"
-
-import RNVectorHelper from './RNVectorHelper'
+import RNVectorHelper from './RNVectorHelper';
 
 class RNShineButton extends PureComponent {
   _onChange = event => {
     let value = false;
-    if (event.nativeEvent.value === "YES") value = true;
+    if (event.nativeEvent.value === 'YES') value = true;
 
     this.props.onChange && this.props.onChange(value);
 
@@ -18,10 +17,15 @@ class RNShineButton extends PureComponent {
   };
 
   render() {
+    const { customGlyph } = this.props;
     let shape;
     if (this.props.shape && this.props.shape.props) {
       let icon = this.props.shape.props;
-      let vectorIcon = RNVectorHelper.Resolve(icon.family, icon.name);
+      let vectorIcon = RNVectorHelper.Resolve(
+        icon.family,
+        icon.name,
+        customGlyph
+      );
 
       shape = Object.assign({}, icon, vectorIcon);
       shape = Object.assign({}, shape, { size: this.props.size });
@@ -46,10 +50,9 @@ class RNShineButton extends PureComponent {
         fillColor={this.props.fillColor}
         onChange={this._onChange}
       />
-    )
+    );
   }
 }
-
 
 RNShineButton.propTypes = {
   ...ViewPropTypes,
@@ -65,7 +68,8 @@ RNShineButton.propTypes = {
   fillColor: PropTypes.string,
   size: PropTypes.number,
   props: PropTypes.object,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  customGlyph: PropTypes.object
 };
 
 RNShineButton.defaultProps = {
@@ -74,9 +78,8 @@ RNShineButton.defaultProps = {
   size: 100
 };
 
-
-const ShineButton = requireNativeComponent("RNShineButton", RNShineButton, {
+const ShineButton = requireNativeComponent('RNShineButton', RNShineButton, {
   nativeOnly: { onChange: true }
-})
+});
 
-export default RNShineButton
+export default RNShineButton;
